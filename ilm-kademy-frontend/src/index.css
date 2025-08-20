@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* CSS Custom Properties for theme switching */
+    --color-background: 249 250 251;
+    --color-surface: 255 255 255;
+    --color-text-primary: 15 23 42;
+    --color-text-secondary: 71 85 105;
+    --color-border: 229 231 235;
+  }
+
+  .dark {
+    --color-background: 15 23 42;
+    --color-surface: 30 41 59;
+    --color-text-primary: 248 250 252;
+    --color-text-secondary: 203 213 225;
+    --color-border: 51 65 85;
+  }
+
+  html {
+    font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+    height: 100%;
+  }
+
+  body {
+    @apply bg-light-background dark:bg-dark-background text-light-text-primary dark:text-dark-text-primary;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-light-background dark:ring-offset-dark-background;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Base component styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500 active:bg-brand-800;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 focus:ring-brand-500;
+  }
+
+  .btn-subtle {
+    @apply btn bg-transparent text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-gray-500;
+  }
+
+  .input {
+    @apply w-full rounded-xl border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:border-brand-500 focus:ring-brand-500 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-soft hover:shadow-md transition-all duration-200;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2;
+  }
+
+  .form-error {
+    @apply text-error-500 text-sm mt-1;
+  }
+
+  /* Typography utilities */
+  .text-display {
+    @apply text-3xl md:text-4xl font-bold leading-tight;
+  }
+
+  .text-h1 {
+    @apply text-3xl md:text-4xl font-bold leading-tight;
+  }
+
+  .text-h2 {
+    @apply text-2xl font-semibold leading-tight;
+  }
+
+  .text-h3 {
+    @apply text-xl font-semibold leading-tight;
+  }
+
+  .text-body {
+    @apply text-base leading-relaxed;
+  }
+
+  .text-small {
+    @apply text-sm text-slate-500 dark:text-slate-400;
+  }
+
+  /* Layout utilities */
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 md:px-6;
+  }
+
+  .section-spacing {
+    @apply mt-6;
+  }
+
+  .content-padding {
+    @apply p-4 md:p-6;
+  }
+}
+
+@layer utilities {
+  /* Custom utility classes */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.2s ease-out;
+  }
+} 
