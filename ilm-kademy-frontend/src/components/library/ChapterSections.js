@@ -31,17 +31,17 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
     
     const iconMap = {
       'INTRODUCTION': BookOpenIcon,
-      'SUMMARY': DocumentTextIcon,
+      'POINT_WISE_SUMMARY': DocumentTextIcon,
       'SLOS': AcademicCapIcon,
-      'PRE_READING': QuestionMarkCircleIcon,
-      'VOCABULARY_TRANSLATION': LanguageIcon,
+      'PRE_READING_QUESTIONS': QuestionMarkCircleIcon,
+      'VOCABULARY_TEXT_TRANSLATION': LanguageIcon,
       'GLOSSARY': DocumentTextIcon,
-      'SHORT_QUESTIONS': QuestionMarkCircleIcon,
-      'OBJECTIVE_QUESTIONS': ClipboardDocumentCheckIcon,
-      'VOCAB_GRAMMAR': AcademicCapIcon,
-      'ORAL_COMMUNICATION': ChatBubbleLeftRightIcon,
-      'WRITING_SKILLS': PencilIcon,
-      'IDIOMS_PHRASALS': LightBulbIcon,
+      'EXERCISE_SHORT_QUESTIONS': QuestionMarkCircleIcon,
+      'EXERCISE_OBJECTIVES': ClipboardDocumentCheckIcon,
+      'EXERCISE_VOCABULARY_GRAMMAR': AcademicCapIcon,
+      'EXERCISE_ORAL_COMMUNICATION': ChatBubbleLeftRightIcon,
+      'EXERCISE_WRITING_SKILLS': PencilIcon,
+      'IDIOMS_PHRASAL_VERBS': LightBulbIcon,
       'ASSESSMENT_TEST': ClipboardDocumentCheckIcon,
     };
     return iconMap[kind] || DocumentTextIcon;
@@ -52,17 +52,17 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
     
     const colorMap = {
       'INTRODUCTION': 'bg-blue-50 border-blue-200 text-blue-800',
-      'SUMMARY': 'bg-green-50 border-green-200 text-green-800',
+      'POINT_WISE_SUMMARY': 'bg-green-50 border-green-200 text-green-800',
       'SLOS': 'bg-purple-50 border-purple-200 text-purple-800',
-      'PRE_READING': 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      'VOCABULARY_TRANSLATION': 'bg-indigo-50 border-indigo-200 text-indigo-800',
+      'PRE_READING_QUESTIONS': 'bg-yellow-50 border-yellow-200 text-yellow-800',
+      'VOCABULARY_TEXT_TRANSLATION': 'bg-indigo-50 border-indigo-200 text-indigo-800',
       'GLOSSARY': 'bg-teal-50 border-teal-200 text-teal-800',
-      'SHORT_QUESTIONS': 'bg-orange-50 border-orange-200 text-orange-800',
-      'OBJECTIVE_QUESTIONS': 'bg-red-50 border-red-200 text-red-800',
-      'VOCAB_GRAMMAR': 'bg-pink-50 border-pink-200 text-pink-800',
-      'ORAL_COMMUNICATION': 'bg-emerald-50 border-emerald-200 text-emerald-800',
-      'WRITING_SKILLS': 'bg-cyan-50 border-cyan-200 text-cyan-800',
-      'IDIOMS_PHRASALS': 'bg-amber-50 border-amber-200 text-amber-800',
+      'EXERCISE_SHORT_QUESTIONS': 'bg-orange-50 border-orange-200 text-orange-800',
+      'EXERCISE_OBJECTIVES': 'bg-red-50 border-red-200 text-red-800',
+      'EXERCISE_VOCABULARY_GRAMMAR': 'bg-pink-50 border-pink-200 text-pink-800',
+      'EXERCISE_ORAL_COMMUNICATION': 'bg-emerald-50 border-emerald-200 text-emerald-800',
+      'EXERCISE_WRITING_SKILLS': 'bg-cyan-50 border-cyan-200 text-cyan-800',
+      'IDIOMS_PHRASAL_VERBS': 'bg-amber-50 border-amber-200 text-amber-800',
       'ASSESSMENT_TEST': 'bg-rose-50 border-rose-200 text-rose-800',
     };
     return colorMap[kind] || 'bg-gray-50 border-gray-200 text-gray-800';
@@ -73,17 +73,17 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
     
     const titleMap = {
       'INTRODUCTION': 'Introduction',
-      'SUMMARY': 'Point-wise Summary',
+      'POINT_WISE_SUMMARY': 'Point-wise Summary',
       'SLOS': 'Student Learning Objectives',
-      'PRE_READING': 'Pre-reading Questions',
-      'VOCABULARY_TRANSLATION': 'Vocabulary, Text & Translation',
+      'PRE_READING_QUESTIONS': 'Pre-reading Questions',
+      'VOCABULARY_TEXT_TRANSLATION': 'Vocabulary, Text & Translation',
       'GLOSSARY': 'Glossary',
-      'SHORT_QUESTIONS': 'Exercise: Short Questions',
-      'OBJECTIVE_QUESTIONS': 'Exercise: Objectives',
-      'VOCAB_GRAMMAR': 'Exercise: Vocabulary and Grammar',
-      'ORAL_COMMUNICATION': 'Exercise: Oral Communication',
-      'WRITING_SKILLS': 'Exercise: Writing Skills',
-      'IDIOMS_PHRASALS': 'Idioms and Phrasal Verbs',
+      'EXERCISE_SHORT_QUESTIONS': 'Exercise: Short Questions',
+      'EXERCISE_OBJECTIVES': 'Exercise: Objectives',
+      'EXERCISE_VOCABULARY_GRAMMAR': 'Exercise: Vocabulary and Grammar',
+      'EXERCISE_ORAL_COMMUNICATION': 'Exercise: Oral Communication',
+      'EXERCISE_WRITING_SKILLS': 'Exercise: Writing Skills',
+      'IDIOMS_PHRASAL_VERBS': 'Idioms and Phrasal Verbs of the Lesson',
       'ASSESSMENT_TEST': 'Assessment Test',
     };
     return titleMap[kind] || (typeof kind === 'string' ? kind.replace('_', ' ') : 'Unknown Section');
@@ -126,23 +126,27 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
           </div>
         );
 
-      case 'SUMMARY':
+      case 'POINT_WISE_SUMMARY':
         return (
           <div className="space-y-4">
-            {content.main_points && (
+            {content.points && (
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Main Points</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Main Points</h4>
                 <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  {content.main_points.map((point, index) => (
-                    <li key={index} className="pl-2">{point}</li>
+                  {content.points.map((point, index) => (
+                    <li key={index} className="text-gray-700">{point}</li>
                   ))}
                 </ul>
               </div>
             )}
-            {content.learning_outcomes && (
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h4 className="font-medium text-green-900 mb-2">Learning Outcomes</h4>
-                <p className="text-green-800">{content.learning_outcomes}</p>
+            {content.main_ideas && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Key Ideas</h4>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {content.main_ideas.map((idea, index) => (
+                    <li key={index}>{idea}</li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
@@ -150,87 +154,82 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
 
       case 'SLOS':
         return (
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">Learning Objectives</h4>
-            <ul className="space-y-2">
-              {content.objectives.map((objective, index) => (
-                <li key={index} className="flex items-start">
-                  <div className="flex-shrink-0 w-5 h-5 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium mr-3 mt-0.5">
-                    {index + 1}
-                  </div>
-                  <span className="text-gray-700">{objective}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-
-      case 'PRE_READING':
-        return (
           <div className="space-y-4">
-            {content.questions && (
+            {content.objectives && (
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Pre-Reading Questions</h4>
-                <ul className="space-y-3">
-                  {content.questions.map((question, index) => (
-                    <li key={index} className="bg-yellow-50 p-3 rounded-lg">
-                      <p className="text-yellow-900 font-medium">{question}</p>
-                    </li>
+                <h4 className="font-medium text-gray-900 mb-3">Learning Objectives</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                  {content.objectives.map((objective, index) => (
+                    <li key={index} className="text-gray-700">{objective}</li>
                   ))}
                 </ul>
               </div>
             )}
-            {content.reflection_prompt && (
-              <div className="bg-amber-50 p-4 rounded-lg">
-                <h4 className="font-medium text-amber-900 mb-2">Reflection Prompt</h4>
-                <p className="text-amber-800 italic">{content.reflection_prompt}</p>
+            {content.outcomes && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Expected Outcomes</h4>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {content.outcomes.map((outcome, index) => (
+                    <li key={index}>{outcome}</li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
         );
 
-      case 'VOCABULARY_TRANSLATION':
+      case 'PRE_READING_QUESTIONS':
         return (
           <div className="space-y-4">
-            {content.text && (
-              <p className="text-gray-700 leading-relaxed mb-4">{content.text}</p>
+            {content.questions && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Pre-reading Questions</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                  {content.questions.map((question, index) => (
+                    <li key={index} className="text-gray-700">{question}</li>
+                  ))}
+                </ul>
+              </div>
             )}
+            {content.purpose && (
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <h4 className="font-medium text-yellow-900 mb-2">Purpose</h4>
+                <p className="text-yellow-800">{content.purpose}</p>
+              </div>
+            )}
+          </div>
+        );
+
+      case 'VOCABULARY_TEXT_TRANSLATION':
+        return (
+          <div className="space-y-4">
             {content.vocabulary && (
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Key Vocabulary</h4>
-                <div className="space-y-3">
-                  {content.vocabulary.map((item, index) => (
-                    <div key={index} className="bg-indigo-50 p-4 rounded-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h5 className="font-semibold text-indigo-900">{item.word}</h5>
-                          <p className="text-indigo-800 text-sm mt-1">{item.definition}</p>
-                          {item.example && (
-                            <p className="text-indigo-700 text-sm mt-2 italic">"{item.example}"</p>
-                          )}
-                        </div>
-                        {item.translation && (
-                          <div className="text-right text-sm text-indigo-600">
-                            <span className="font-medium">Translation:</span>
-                            <p className="mt-1">{item.translation}</p>
-                          </div>
-                        )}
-                      </div>
-                      {item.synonyms && (
-                        <div className="mt-2 pt-2 border-t border-indigo-200">
-                          <span className="text-xs text-indigo-600 font-medium">Synonyms: </span>
-                          <span className="text-xs text-indigo-600">{item.synonyms.join(', ')}</span>
-                        </div>
-                      )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {Object.entries(content.vocabulary).map(([word, definition]) => (
+                    <div key={word} className="bg-indigo-50 p-3 rounded-lg">
+                      <span className="font-medium text-indigo-900">{word}</span>
+                      <p className="text-indigo-800 text-sm mt-1">{definition}</p>
                     </div>
                   ))}
                 </div>
               </div>
             )}
+            {content.text && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Main Text</h4>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-700 leading-relaxed">{content.text}</p>
+                </div>
+              </div>
+            )}
             {content.translation && (
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-2">Full Translation</h4>
-                <p className="text-gray-700">{content.translation}</p>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Translation</h4>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <p className="text-green-800">{content.translation}</p>
+                </div>
               </div>
             )}
           </div>
@@ -238,161 +237,104 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
 
       case 'GLOSSARY':
         return (
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">Important Terms</h4>
-            <div className="space-y-3">
-              {Object.entries(content.terms || {}).map(([term, definition], index) => (
-                <div key={index} className="bg-teal-50 p-3 rounded-lg">
-                  <h5 className="font-semibold text-teal-900">{term}</h5>
-                  <p className="text-teal-800 text-sm mt-1">{definition}</p>
+          <div className="space-y-4">
+            {content.terms && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Terms and Definitions</h4>
+                <div className="space-y-3">
+                  {Object.entries(content.terms).map(([term, definition]) => (
+                    <div key={term} className="bg-teal-50 p-3 rounded-lg">
+                      <span className="font-medium text-teal-900">{term}</span>
+                      <p className="text-teal-800 text-sm mt-1">{definition}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         );
 
-      case 'SHORT_QUESTIONS':
+      case 'EXERCISE_SHORT_QUESTIONS':
         return (
           <div>
             <h4 className="font-medium text-gray-900 mb-3">Short Answer Questions</h4>
             <div className="space-y-4">
-              {content.questions.map((item, index) => (
+              {content.questions && content.questions.map((question, index) => (
                 <div key={index} className="bg-orange-50 p-4 rounded-lg">
-                  <h5 className="font-medium text-orange-900 mb-2">{item.question}</h5>
-                  <div className="bg-white p-3 rounded border border-orange-200">
-                    <p className="text-orange-800 text-sm"><strong>Answer:</strong> {item.answer}</p>
-                    {item.explanation && (
-                      <p className="text-orange-700 text-sm mt-2 italic">{item.explanation}</p>
-                    )}
-                  </div>
+                  <h5 className="font-medium text-orange-900 mb-2">
+                    Question {index + 1}
+                  </h5>
+                  <p className="text-orange-800 mb-3">{question}</p>
+                  {content.answers && content.answers[question] && (
+                    <div className="bg-white p-3 rounded border border-orange-200">
+                      <p className="text-sm text-gray-700">
+                        <strong>Answer:</strong> {content.answers[question]}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         );
 
-      case 'OBJECTIVE_QUESTIONS':
+      case 'EXERCISE_OBJECTIVES':
         return (
           <div>
-            <h4 className="font-medium text-gray-900 mb-3">Multiple Choice Questions</h4>
+            <h4 className="font-medium text-gray-900 mb-3">Objective Questions</h4>
             <div className="space-y-4">
-              {content.questions.map((item, index) => (
+              {content.questions && content.questions.map((question, index) => (
                 <div key={index} className="bg-red-50 p-4 rounded-lg">
-                  <h5 className="font-medium text-red-900 mb-3">{item.question}</h5>
+                  <h5 className="font-medium text-red-900 mb-3">
+                    Question {index + 1}
+                  </h5>
+                  <p className="text-red-800 mb-3">{question.question}</p>
                   <div className="space-y-2">
-                    {item.options.map((option, optIndex) => (
+                    {question.options && question.options.map((option, optIndex) => (
                       <label key={optIndex} className="flex items-center">
                         <input
                           type="radio"
-                          name={`question-${index}`}
+                          name={`objective-${index}`}
                           value={optIndex}
                           className="mr-2 text-red-600"
                           disabled
                         />
                         <span className={`text-sm ${
-                          optIndex === item.correct_answer 
+                          optIndex === question.correct_answer 
                             ? 'text-green-700 font-medium' 
-                            : 'text-red-700'
+                            : 'text-gray-700'
                         }`}>
                           {option}
-                          {optIndex === item.correct_answer && ' ✓'}
+                          {optIndex === question.correct_answer && ' ✓'}
                         </span>
                       </label>
                     ))}
                   </div>
-                  {item.explanation && (
-                    <div className="mt-3 p-2 bg-green-50 rounded border border-green-200">
-                      <p className="text-green-800 text-sm"><strong>Explanation:</strong> {item.explanation}</p>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
           </div>
         );
 
-      case 'VOCAB_GRAMMAR':
+      case 'EXERCISE_VOCABULARY_GRAMMAR':
         return (
           <div className="space-y-4">
             {content.vocabulary_exercises && (
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Vocabulary Exercises</h4>
-                {content.vocabulary_exercises.map((exercise, index) => (
-                  <div key={index} className="bg-pink-50 p-4 rounded-lg mb-3">
-                    <h5 className="font-medium text-pink-900 mb-2">{exercise.exercise}</h5>
-                    <div className="space-y-2">
-                      {exercise.sentences.map((sentence, sentIndex) => (
-                        <div key={sentIndex} className="bg-white p-2 rounded border border-pink-200">
-                          <p className="text-pink-800 text-sm">{sentence}</p>
-                        </div>
-                      ))}
-                    </div>
-                    {exercise.answers && (
-                      <div className="mt-3 p-2 bg-green-50 rounded border border-green-200">
-                        <p className="text-green-800 text-sm"><strong>Answers:</strong> {exercise.answers.join(', ')}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            {content.grammar_focus && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Grammar Focus: {content.grammar_focus.topic}</h4>
-                <div className="space-y-3">
-                  {content.grammar_focus.examples.map((example, index) => (
-                    <div key={index} className="bg-blue-50 p-3 rounded-lg">
-                      <p className="text-blue-800 text-sm italic">"{example}"</p>
-                    </div>
-                  ))}
-                  {content.grammar_focus.practice && (
-                    <div className="bg-amber-50 p-3 rounded-lg">
-                      <p className="text-amber-800 text-sm"><strong>Practice:</strong> {content.grammar_focus.practice}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        );
-
-      case 'ORAL_COMMUNICATION':
-        return (
-          <div className="space-y-4">
-            {content.activities && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Speaking Activities</h4>
-                <div className="space-y-4">
-                  {content.activities.map((activity, index) => (
-                    <div key={index} className="bg-emerald-50 p-4 rounded-lg">
-                      <h5 className="font-medium text-emerald-900 mb-2">{activity.activity}</h5>
-                      <p className="text-emerald-800 text-sm mb-3">{activity.description}</p>
-                      {activity.scenario && (
-                        <div className="bg-white p-3 rounded border border-emerald-200 mb-3">
-                          <p className="text-emerald-700 text-sm"><strong>Scenario:</strong> {activity.scenario}</p>
-                        </div>
-                      )}
-                      {activity.objectives && (
-                        <div>
-                          <h6 className="font-medium text-emerald-800 text-sm mb-2">Objectives:</h6>
-                          <ul className="list-disc list-inside space-y-1 text-emerald-700 text-sm">
-                            {activity.objectives.map((obj, objIndex) => (
-                              <li key={objIndex}>{obj}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {content.speaking_tips && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Speaking Tips</h4>
                 <ul className="list-disc list-inside space-y-1 text-gray-700">
-                  {content.speaking_tips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
+                  {content.vocabulary_exercises.map((exercise, index) => (
+                    <li key={index}>{exercise}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {content.grammar_exercises && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Grammar Exercises</h4>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {content.grammar_exercises.map((exercise, index) => (
+                    <li key={index}>{exercise}</li>
                   ))}
                 </ul>
               </div>
@@ -400,53 +342,51 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
           </div>
         );
 
-      case 'WRITING_SKILLS':
+      case 'EXERCISE_ORAL_COMMUNICATION':
         return (
           <div className="space-y-4">
+            {content.speaking_activities && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Speaking Activities</h4>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {content.speaking_activities.map((activity, index) => (
+                    <li key={index}>{activity}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {content.discussion_topics && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Discussion Topics</h4>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {content.discussion_topics.map((topic, index) => (
+                    <li key={index}>{topic}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        );
+
+      case 'EXERCISE_WRITING_SKILLS':
+        return (
+          <div className="space-y-4">
+            {content.writing_prompts && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Writing Prompts</h4>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {content.writing_prompts.map((prompt, index) => (
+                    <li key={index}>{prompt}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {content.writing_tasks && (
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Writing Tasks</h4>
-                <div className="space-y-4">
-                  {content.writing_tasks.map((task, index) => (
-                    <div key={index} className="bg-cyan-50 p-4 rounded-lg">
-                      <h5 className="font-medium text-cyan-900 mb-2">{task.task}</h5>
-                      <p className="text-cyan-800 text-sm mb-3">{task.description}</p>
-                      {task.requirements && (
-                        <div className="mb-3">
-                          <h6 className="font-medium text-cyan-800 text-sm mb-2">Requirements:</h6>
-                          <ul className="list-disc list-inside space-y-1 text-cyan-700 text-sm">
-                            {task.requirements.map((req, reqIndex) => (
-                              <li key={reqIndex}>{req}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {task.word_limit && (
-                        <div className="bg-white p-2 rounded border border-cyan-200">
-                          <p className="text-cyan-700 text-sm"><strong>Word Limit:</strong> {task.word_limit}</p>
-                        </div>
-                      )}
-                      {task.prompts && (
-                        <div className="mt-3">
-                          <h6 className="font-medium text-cyan-800 text-sm mb-2">Writing Prompts:</h6>
-                          <ul className="list-disc list-inside space-y-1 text-cyan-700 text-sm">
-                            {task.prompts.map((prompt, promptIndex) => (
-                              <li key={promptIndex}>{prompt}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {content.writing_tips && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Writing Tips</h4>
                 <ul className="list-disc list-inside space-y-1 text-gray-700">
-                  {content.writing_tips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
+                  {content.writing_tasks.map((task, index) => (
+                    <li key={index}>{task}</li>
                   ))}
                 </ul>
               </div>
@@ -454,19 +394,17 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
           </div>
         );
 
-      case 'IDIOMS_PHRASALS':
+      case 'IDIOMS_PHRASAL_VERBS':
         return (
           <div className="space-y-4">
             {content.idioms && (
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Idioms</h4>
                 <div className="space-y-3">
-                  {content.idioms.map((idiom, index) => (
-                    <div key={index} className="bg-amber-50 p-4 rounded-lg">
-                      <h5 className="font-medium text-amber-900">{idiom.idiom}</h5>
-                      <p className="text-amber-800 text-sm mt-1"><strong>Meaning:</strong> {idiom.meaning}</p>
-                      <p className="text-amber-700 text-sm mt-2 italic">"{idiom.example}"</p>
-                      <p className="text-amber-600 text-xs mt-2"><strong>Usage:</strong> {idiom.usage}</p>
+                  {Object.entries(content.idioms).map(([idiom, meaning]) => (
+                    <div key={idiom} className="bg-amber-50 p-4 rounded-lg">
+                      <h5 className="font-medium text-amber-900">{idiom}</h5>
+                      <p className="text-amber-800 text-sm mt-1">{meaning}</p>
                     </div>
                   ))}
                 </div>
@@ -476,12 +414,10 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Phrasal Verbs</h4>
                 <div className="space-y-3">
-                  {content.phrasal_verbs.map((phrasal, index) => (
-                    <div key={index} className="bg-amber-50 p-4 rounded-lg">
-                      <h5 className="font-medium text-amber-900">{phrasal.phrasal}</h5>
-                      <p className="text-amber-800 text-sm mt-1"><strong>Meaning:</strong> {phrasal.meaning}</p>
-                      <p className="text-amber-700 text-sm mt-2 italic">"{phrasal.example}"</p>
-                      <p className="text-amber-600 text-xs mt-2"><strong>Usage:</strong> {phrasal.usage}</p>
+                  {Object.entries(content.phrasal_verbs).map(([phrasal, meaning]) => (
+                    <div key={phrasal} className="bg-amber-50 p-4 rounded-lg">
+                      <h5 className="font-medium text-amber-900">{phrasal}</h5>
+                      <p className="text-amber-800 text-sm mt-1">{meaning}</p>
                     </div>
                   ))}
                 </div>
@@ -493,21 +429,17 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
       case 'ASSESSMENT_TEST':
         return (
           <div className="space-y-4">
-            {content.test_info && (
+            {content.time_limit && content.total_marks && (
               <div className="bg-rose-50 p-4 rounded-lg">
                 <h4 className="font-medium text-rose-900 mb-2">Test Information</h4>
-                <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-rose-700 font-medium">Duration:</span>
-                    <p className="text-rose-800">{content.test_info.duration}</p>
+                    <span className="text-rose-700 font-medium">Time Limit:</span>
+                    <p className="text-rose-800">{content.time_limit}</p>
                   </div>
                   <div>
-                    <span className="text-rose-700 font-medium">Questions:</span>
-                    <p className="text-rose-800">{content.test_info.total_questions}</p>
-                  </div>
-                  <div>
-                    <span className="text-rose-700 font-medium">Passing Score:</span>
-                    <p className="text-rose-800">{content.test_info.passing_score}</p>
+                    <span className="text-rose-700 font-medium">Total Marks:</span>
+                    <p className="text-rose-800">{content.total_marks}</p>
                   </div>
                 </div>
               </div>
@@ -519,48 +451,25 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
                   {content.questions.map((question, index) => (
                     <div key={index} className="bg-white border border-rose-200 p-4 rounded-lg">
                       <h5 className="font-medium text-gray-900 mb-3">
-                        Question {index + 1} ({question.points} points)
+                        Question {index + 1}
                       </h5>
                       <p className="text-gray-700 mb-3">{question.question}</p>
-                      <div className="space-y-2">
-                        {question.options.map((option, optIndex) => (
-                          <label key={optIndex} className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`assessment-${index}`}
-                              value={optIndex}
-                              className="mr-2 text-rose-600"
-                              disabled
-                            />
-                            <span className={`text-sm ${
-                              optIndex === question.correct_answer 
-                                ? 'text-green-700 font-medium' 
-                                : 'text-gray-700'
-                            }`}>
-                              {option}
-                              {optIndex === question.correct_answer && ' ✓'}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
-                      {question.explanation && (
-                        <div className="mt-3 p-2 bg-green-50 rounded border border-green-200">
-                          <p className="text-green-800 text-sm"><strong>Explanation:</strong> {question.explanation}</p>
+                      {question.options && (
+                        <div className="space-y-2">
+                          {question.options.map((option, optIndex) => (
+                            <label key={optIndex} className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`assessment-${index}`}
+                                value={optIndex}
+                                className="mr-2 text-rose-600"
+                                disabled
+                              />
+                              <span className="text-gray-700">{option}</span>
+                            </label>
+                          ))}
                         </div>
                       )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {content.scoring && (
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-3">Scoring Guide</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  {Object.entries(content.scoring).map(([level, range]) => (
-                    <div key={level} className="text-center">
-                      <span className="text-gray-700 font-medium capitalize">{level}:</span>
-                      <p className="text-gray-600">{range}</p>
                     </div>
                   ))}
                 </div>
@@ -674,4 +583,4 @@ const ChapterSections = ({ sections = [], onSectionComplete, completedSections =
   );
 };
 
-export default ChapterSections; 
+export default ChapterSections;

@@ -133,17 +133,17 @@ class ChapterSection(models.Model):
     """
     class SectionKind(models.TextChoices):
         INTRODUCTION = 'INTRODUCTION', _('Introduction')
-        SUMMARY = 'SUMMARY', _('Summary')
-        SLOs = 'SLOS', _('Student Learning Objectives')
-        PRE_READING = 'PRE_READING', _('Pre-Reading Activities')
-        VOCABULARY_TRANSLATION = 'VOCABULARY_TRANSLATION', _('Vocabulary & Translation')
+        POINT_WISE_SUMMARY = 'POINT_WISE_SUMMARY', _('Point-wise Summary')
+        SLOS = 'SLOS', _('Student Learning Objectives')
+        PRE_READING_QUESTIONS = 'PRE_READING_QUESTIONS', _('Pre-reading Questions')
+        VOCABULARY_TEXT_TRANSLATION = 'VOCABULARY_TEXT_TRANSLATION', _('Vocabulary, Text & Translation')
         GLOSSARY = 'GLOSSARY', _('Glossary')
-        SHORT_QUESTIONS = 'SHORT_QUESTIONS', _('Short Questions')
-        OBJECTIVE_QUESTIONS = 'OBJECTIVE_QUESTIONS', _('Objective Questions')
-        VOCAB_GRAMMAR = 'VOCAB_GRAMMAR', _('Vocabulary & Grammar')
-        ORAL_COMMUNICATION = 'ORAL_COMMUNICATION', _('Oral Communication')
-        WRITING_SKILLS = 'WRITING_SKILLS', _('Writing Skills')
-        IDIOMS_PHRASALS = 'IDIOMS_PHRASALS', _('Idioms & Phrasal Verbs')
+        EXERCISE_SHORT_QUESTIONS = 'EXERCISE_SHORT_QUESTIONS', _('Exercise: Short Questions')
+        EXERCISE_OBJECTIVES = 'EXERCISE_OBJECTIVES', _('Exercise: Objectives')
+        EXERCISE_VOCABULARY_GRAMMAR = 'EXERCISE_VOCABULARY_GRAMMAR', _('Exercise: Vocabulary and Grammar')
+        EXERCISE_ORAL_COMMUNICATION = 'EXERCISE_ORAL_COMMUNICATION', _('Exercise: Oral Communication')
+        EXERCISE_WRITING_SKILLS = 'EXERCISE_WRITING_SKILLS', _('Exercise: Writing Skills')
+        IDIOMS_PHRASAL_VERBS = 'IDIOMS_PHRASAL_VERBS', _('Idioms and Phrasal Verbs of the Lesson')
         ASSESSMENT_TEST = 'ASSESSMENT_TEST', _('Assessment Test')
     
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name='sections')
@@ -171,6 +171,27 @@ class ChapterSection(models.Model):
         if isinstance(self.content, dict):
             return self.content.get('summary', str(self.content)[:100])
         return str(self.content)[:100]
+    
+    @classmethod
+    def get_english_book_section_order(cls):
+        """
+        Get the required section order for English books.
+        """
+        return [
+            'INTRODUCTION',
+            'POINT_WISE_SUMMARY', 
+            'SLOS',
+            'PRE_READING_QUESTIONS',
+            'VOCABULARY_TEXT_TRANSLATION',
+            'GLOSSARY',
+            'EXERCISE_SHORT_QUESTIONS',
+            'EXERCISE_OBJECTIVES',
+            'EXERCISE_VOCABULARY_GRAMMAR',
+            'EXERCISE_ORAL_COMMUNICATION',
+            'EXERCISE_WRITING_SKILLS',
+            'IDIOMS_PHRASAL_VERBS',
+            'ASSESSMENT_TEST'
+        ]
 
 class ReadingProgress(models.Model):
     """

@@ -46,31 +46,89 @@ const BookDetailPage = () => {
       } else if (response.status === 401) {
         // If unauthorized, show mock data for development
         console.log('Using mock data due to authentication required');
-        setBook({
-          id: bookId,
-          title: 'Advanced Mathematics',
-          author: 'Dr. Sarah Johnson',
-          subject: 'mathematics',
-          language: 'english',
-          level: 'advanced',
-          description: 'This comprehensive guide covers advanced mathematical concepts including calculus, linear algebra, differential equations, and mathematical analysis. Perfect for university students and professionals seeking to deepen their mathematical understanding.',
-          long_description: 'Advanced Mathematics is designed to provide a thorough understanding of complex mathematical concepts that form the foundation of modern science and engineering. The book progresses from fundamental principles to advanced applications, ensuring readers develop both theoretical knowledge and practical problem-solving skills.',
-          cover_image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=500&fit=crop',
-          chapters_count: 12,
-          total_pages: 450,
-          rating: 4.8,
-          students_enrolled: 1250,
-          estimated_hours: 80,
-          last_updated: '2024-01-15',
-          tags: ['calculus', 'linear algebra', 'differential equations', 'mathematical analysis'],
-          prerequisites: ['Basic calculus', 'Linear algebra fundamentals', 'Mathematical reasoning'],
-          learning_objectives: [
-            'Master advanced calculus techniques',
-            'Understand linear algebra concepts',
-            'Solve complex differential equations',
-            'Apply mathematical analysis methods'
-          ]
-        });
+        
+        // Dynamic mock data based on book ID
+        const mockBookData = {
+          1: {
+            id: bookId,
+            title: 'English Grammar Fundamentals',
+            author: 'Dr. Sarah Johnson',
+            subject: 'english',
+            language: 'english',
+            level: 'beginner',
+            description: 'Master the basics of English grammar and vocabulary. Perfect for beginners starting their English learning journey.',
+            long_description: 'English Grammar Fundamentals provides a solid foundation in English grammar, covering essential concepts like parts of speech, sentence structure, verb tenses, and basic vocabulary. This book is designed for beginners who want to build a strong grammatical foundation.',
+            cover_image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=500&fit=crop',
+            chapters_count: 2,
+            total_pages: 200,
+            rating: 4.8,
+            students_enrolled: 1250,
+            estimated_hours: 40,
+            last_updated: '2024-01-15',
+            tags: ['grammar', 'vocabulary', 'beginners', 'english fundamentals'],
+            prerequisites: ['Basic reading skills', 'Interest in learning English'],
+            learning_objectives: [
+              'Understand basic English grammar rules',
+              'Build essential vocabulary',
+              'Master sentence structure',
+              'Develop confidence in English'
+            ]
+          },
+          2: {
+            id: bookId,
+            title: 'Advanced English Composition',
+            author: 'Prof. Michael Chen',
+            subject: 'english',
+            language: 'english',
+            level: 'intermediate',
+            description: 'Develop advanced writing skills and composition techniques. Learn to express ideas clearly and persuasively.',
+            long_description: 'Advanced English Composition focuses on developing sophisticated writing skills, including essay structure, argumentative writing, creative composition, and academic writing. Perfect for intermediate learners looking to enhance their writing abilities.',
+            cover_image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=500&fit=crop',
+            chapters_count: 2,
+            total_pages: 300,
+            rating: 4.6,
+            students_enrolled: 980,
+            estimated_hours: 60,
+            last_updated: '2024-01-15',
+            tags: ['composition', 'writing', 'essays', 'academic writing'],
+            prerequisites: ['Basic English grammar', 'Intermediate writing skills'],
+            learning_objectives: [
+              'Master essay writing techniques',
+              'Develop persuasive writing skills',
+              'Learn academic writing standards',
+              'Enhance creative composition'
+            ]
+          },
+          11: {
+            id: bookId,
+            title: 'Master English: Complete Language Course',
+            author: 'Dr. Emily Rodriguez',
+            subject: 'english',
+            language: 'english',
+            level: 'intermediate',
+            description: 'A comprehensive English course covering all aspects of language learning including grammar, vocabulary, communication skills, and practical exercises.',
+            long_description: 'Master English is a comprehensive course that covers all essential aspects of English language learning. From fundamental grammar to advanced communication skills, this book provides a complete learning experience with practical exercises and real-world applications.',
+            cover_image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop',
+            chapters_count: 3,
+            total_pages: 400,
+            rating: 4.9,
+            students_enrolled: 2100,
+            estimated_hours: 80,
+            last_updated: '2024-01-15',
+            tags: ['comprehensive', 'communication', 'grammar', 'vocabulary', 'exercises'],
+            prerequisites: ['Basic English knowledge', 'Commitment to learning'],
+            learning_objectives: [
+              'Master comprehensive English skills',
+              'Develop effective communication',
+              'Build advanced vocabulary',
+              'Apply skills in real situations'
+            ]
+          }
+        };
+        
+        // Use the appropriate mock data based on book ID, or default to first book
+        const bookData = mockBookData[parseInt(bookId)] || mockBookData[1];
+        setBook(bookData);
       } else {
         toast.error('Failed to load book details');
       }
@@ -99,44 +157,83 @@ const BookDetailPage = () => {
       } else if (response.status === 401) {
         // If unauthorized, show mock data for development
         console.log('Using mock data due to authentication required');
-        setChapters([
-          {
-            id: 1,
-            title: 'Introduction to Advanced Calculus',
-            description: 'Overview of calculus concepts and mathematical foundations',
-            duration: '6 hours',
-            sections_count: 8,
-            is_completed: false,
-            progress: 0
-          },
-          {
-            id: 2,
-            title: 'Limits and Continuity',
-            description: 'Deep dive into limit concepts and continuous functions',
-            duration: '8 hours',
-            sections_count: 12,
-            is_completed: false,
-            progress: 0
-          },
-          {
-            id: 3,
-            title: 'Differentiation Techniques',
-            description: 'Advanced differentiation methods and applications',
-            duration: '10 hours',
-            sections_count: 15,
-            is_completed: false,
-            progress: 0
-          },
-          {
-            id: 4,
-            title: 'Integration Methods',
-            description: 'Complex integration techniques and applications',
-            duration: '12 hours',
-            sections_count: 18,
-            is_completed: false,
-            progress: 0
-          }
-        ]);
+        
+        // Dynamic chapters data based on book ID
+        const mockChaptersData = {
+          1: [ // English Grammar Fundamentals
+            {
+              id: 1,
+              title: 'Basic Grammar Concepts',
+              description: 'Introduction to parts of speech and sentence structure',
+              duration: '4 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            },
+            {
+              id: 2,
+              title: 'Essential Vocabulary Building',
+              description: 'Building a strong foundation of English vocabulary',
+              duration: '3 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            }
+          ],
+          2: [ // Advanced English Composition
+            {
+              id: 1,
+              title: 'Essay Writing Fundamentals',
+              description: 'Learn the basics of essay structure and organization',
+              duration: '5 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            },
+            {
+              id: 2,
+              title: 'Advanced Writing Techniques',
+              description: 'Master sophisticated writing styles and techniques',
+              duration: '6 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            }
+          ],
+          11: [ // Master English: Complete Language Course
+            {
+              id: 1,
+              title: 'English Fundamentals: Building Strong Foundations',
+              description: 'Master the basics of English grammar and vocabulary',
+              duration: '6 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            },
+            {
+              id: 2,
+              title: 'Effective Communication: Speaking with Confidence',
+              description: 'Develop your speaking and listening skills',
+              duration: '8 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            },
+            {
+              id: 3,
+              title: 'Advanced Writing: Expressing Ideas Clearly',
+              description: 'Learn to write clearly and persuasively',
+              duration: '10 hours',
+              sections_count: 13,
+              is_completed: false,
+              progress: 0
+            }
+          ]
+        };
+        
+        // Use the appropriate chapters data based on book ID, or default to first book
+        const chaptersData = mockChaptersData[parseInt(bookId)] || mockChaptersData[1];
+        setChapters(chaptersData);
       } else {
         toast.error('Failed to load chapters');
       }
@@ -150,6 +247,8 @@ const BookDetailPage = () => {
 
   const getSubjectIcon = (subject) => {
     switch (subject) {
+      case 'english':
+        return <BookOpenIcon className="h-6 w-6 text-indigo-600" />;
       case 'mathematics':
         return <AcademicCapIcon className="h-6 w-6 text-blue-600" />;
       case 'science':

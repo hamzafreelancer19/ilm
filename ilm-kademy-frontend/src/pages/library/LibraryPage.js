@@ -17,6 +17,7 @@ const LibraryPage = () => {
 
   const subjects = [
     { id: 'all', name: 'All Subjects' },
+    { id: 'english', name: 'English' },
     { id: 'mathematics', name: 'Mathematics' },
     { id: 'science', name: 'Science' },
     { id: 'history', name: 'History' },
@@ -72,55 +73,42 @@ const LibraryPage = () => {
         setBooks([
           {
             id: 1,
-            title: 'Advanced Mathematics',
+            title: 'English Grammar Fundamentals',
             author: 'Dr. Sarah Johnson',
-            subject: 'mathematics',
+            subject: 'english',
             language: 'english',
-            level: 'advanced',
-            description: 'Comprehensive guide to advanced mathematical concepts including calculus, linear algebra, and differential equations.',
-            cover_image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=500&fit=crop',
-            chapters_count: 12,
+            level: 'beginner',
+            description: 'Master the basics of English grammar and vocabulary. Perfect for beginners starting their English learning journey.',
+            cover_image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=500&fit=crop',
+            chapters_count: 2,
             rating: 4.8,
             students_enrolled: 1250
           },
           {
             id: 2,
-            title: 'Physics Fundamentals',
+            title: 'Advanced English Composition',
             author: 'Prof. Michael Chen',
-            subject: 'science',
+            subject: 'english',
             language: 'english',
             level: 'intermediate',
-            description: 'Essential physics concepts covering mechanics, thermodynamics, and electromagnetism with practical examples.',
-            cover_image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=500&fit=crop',
-            chapters_count: 15,
+            description: 'Develop advanced writing skills and composition techniques. Learn to express ideas clearly and persuasively.',
+            cover_image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=500&fit=crop',
+            chapters_count: 2,
             rating: 4.6,
             students_enrolled: 980
           },
           {
-            id: 3,
-            title: 'Islamic History',
-            author: 'Dr. Ahmed Hassan',
-            subject: 'history',
-            language: 'urdu',
+            id: 11,
+            title: 'Master English: Complete Language Course',
+            author: 'Dr. Emily Rodriguez',
+            subject: 'english',
+            language: 'english',
             level: 'intermediate',
-            description: 'Comprehensive overview of Islamic civilization, from the early caliphates to modern times.',
-            cover_image: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=400&h=500&fit=crop',
-            chapters_count: 18,
+            description: 'A comprehensive English course covering all aspects of language learning including grammar, vocabulary, communication skills, and practical exercises.',
+            cover_image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop',
+            chapters_count: 3,
             rating: 4.9,
             students_enrolled: 2100
-          },
-          {
-            id: 4,
-            title: 'Programming Basics',
-            author: 'Dr. Emily Rodriguez',
-            subject: 'computer_science',
-            language: 'english',
-            level: 'beginner',
-            description: 'Learn programming fundamentals with Python, covering variables, loops, functions, and object-oriented programming.',
-            cover_image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=500&fit=crop',
-            chapters_count: 10,
-            rating: 4.7,
-            students_enrolled: 3200
           }
         ]);
       }
@@ -151,7 +139,7 @@ const LibraryPage = () => {
 
     // Language filter
     if (selectedLanguage !== 'all') {
-      filtered = filtered.filter(book => book.subject === selectedLanguage);
+      filtered = filtered.filter(book => book.language === selectedLanguage);
     }
 
     // Level filter
@@ -164,6 +152,8 @@ const LibraryPage = () => {
 
   const getSubjectIcon = (subject) => {
     switch (subject) {
+      case 'english':
+        return <BookOpenIcon className="h-6 w-6 text-indigo-600" />;
       case 'mathematics':
         return <AcademicCapIcon className="h-6 w-6 text-blue-600" />;
       case 'science':
@@ -226,7 +216,7 @@ const LibraryPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filters */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             {/* Search */}
             <div className="lg:col-span-2">
               <div className="relative">
@@ -251,6 +241,21 @@ const LibraryPage = () => {
                 {subjects.map(subject => (
                   <option key={subject.id} value={subject.id}>
                     {subject.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Language Filter */}
+            <div>
+              <select
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                {languages.map(language => (
+                  <option key={language.id} value={language.id}>
+                    {language.name}
                   </option>
                 ))}
               </select>
