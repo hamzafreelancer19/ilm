@@ -1475,7 +1475,7 @@ const ChapterViewerPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-[#F9FAFB] overflow-x-hidden">
       {/* Top Header Bar */}
       <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
@@ -1503,11 +1503,11 @@ const ChapterViewerPage = () => {
         </div>
       </div>
 
-      <div className="flex h-screen">
+      <div className="flex h-screen flex-col">
         {/* Chapter Sections List */}
-        <div className="w-64 bg-white border-r border-gray-200 p-3 shadow-sm">
-          <h3 className="text-base font-['Poppins'] font-bold text-[#111827] mb-3">Chapter Sections</h3>
-          <div className="space-y-1">
+        <div className="w-fit bg-white border-r border-gray-200 p-3 shadow-sm flex flex-col gap-10 ">
+          <h3 className="text-base font-['Poppins'] font-bold text-[#111827] mb-3 text-center">Chapter Sections</h3>
+          <div className="space-y-1 ">
             {chapter.sections?.map((section, index) => {
               const isCompleted = completedSections.includes(section.id);
               const isCurrent = index === currentSection;
@@ -1516,7 +1516,7 @@ const ChapterViewerPage = () => {
                 <button
                   key={section.id}
                   onClick={() => setCurrentSection(index)}
-                  className={`w-full text-left p-2 rounded-md transition-all duration-200 ${
+                  className={`w-90 text-left p-3 rounded-md ml-5 border border-gray-200 transition-all duration-200 ${
                     isCurrent
                       ? 'bg-[#10B981] text-white shadow-lg transform scale-105'
                       : isCompleted
@@ -1541,10 +1541,10 @@ const ChapterViewerPage = () => {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 bg-[#F9FAFB] p-4">
+        <div className="flex-1 bg-[#F9FAFB] p-4 w-screen md:w-screen">
           {/* Action Buttons */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between mb-4 w-[76%]">
+            <div className="flex items-center space-x-2 ">
               <button className="flex items-center px-3 py-2 border border-[#1E3A8A] rounded-md text-sm font-['Poppins'] font-semibold text-[#1E3A8A] bg-white hover:bg-[#1E3A8A] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                 <AcademicCapIcon className="h-4 w-4 mr-1" />
                 AI Help
@@ -1566,7 +1566,7 @@ const ChapterViewerPage = () => {
           </div>
 
           {/* Section Content */}
-          <div className="mb-4">
+          <div className="mb-4 ">
             <h1 className="text-xl font-['Poppins'] font-bold text-[#111827] mb-3">
               {chapter.sections?.[currentSection]?.kind ? 
                 chapter.sections[currentSection].kind.replace(/_/g, ' ') : 
@@ -1576,7 +1576,7 @@ const ChapterViewerPage = () => {
             
             <div className="prose max-w-none">
               {chapter.sections && chapter.sections[currentSection] ? (
-                <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-lg">
+                <div className="bg-white w-[76%] rounded-lg border border-gray-200 p-4 shadow-lg">
                   <div className="space-y-3">
                     {(() => {
                       const section = chapter.sections[currentSection];
@@ -2033,13 +2033,13 @@ const ChapterViewerPage = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 w-[76%]">
             <button
               onClick={() => setCurrentSection(Math.max(0, currentSection - 1))}
               disabled={currentSection === 0}
               className="flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-['Poppins'] font-semibold text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:transform-none"
             >
-              <ChevronLeftIcon className="h-4 w-4 mr-1" />
+              <ChevronLeftIcon className="h-4 w-4 " />
               Previous Section
             </button>
             
@@ -2054,7 +2054,7 @@ const ChapterViewerPage = () => {
           </div>
 
           {/* Personal Notes */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-lg">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-lg w-[76%]">
             <h3 className="text-base font-['Poppins'] font-bold text-[#111827] mb-3">Personal Notes</h3>
             <textarea
               value={userNotes}

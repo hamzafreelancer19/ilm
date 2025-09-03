@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+
 import { 
   XMarkIcon,
   HomeIcon,
@@ -71,13 +72,13 @@ const Sidebar = ({ open, onClose }) => {
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <div className="flex flex-col w-64 h-full">
+      {/* Desktop Sidebar (visible and fixed under navbar) */}
+      <div className="hidden lg:block">
+        <div className="fixed top-16 left-0 z-40 h-full w-64 mt-[-4rem]">
           <div className="flex flex-col h-full bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700">
             {/* Logo */}
-            <div className="flex items-center h-16 flex-shrink-0 px-6 bg-brand-600 dark:bg-brand-700">
-              <h1 className="text-xl font-bold text-white">Ilm Kademy</h1>
+            <div className="flex items-center h-16 flex-shrink-0 px-6 dark:bg-brand-700">
+              <img src="/image/club_logo.svg" alt="Ilm" className="h-8" />
             </div>
 
             {/* Navigation */}
