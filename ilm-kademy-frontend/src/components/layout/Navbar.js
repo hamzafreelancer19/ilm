@@ -37,11 +37,11 @@ const Navbar = ({ onMenuClick }) => {
   };
 
   return (
-    <nav className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 fixed top-0 left-0 right-0 z-50">
-      <div className="container-app">
+    <nav className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 fixed top-0 right-0 z-50 xl:w-[80%] w-full">
+      <div className="container-app ">
         <div className="flex items-center justify-between h-16">
           {/* Left side - Menu button and search */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center  ">
             {/* Mobile menu button */}
             <button
               onClick={onMenuClick}
@@ -51,7 +51,7 @@ const Navbar = ({ onMenuClick }) => {
             </button>
 
             {/* Search */}
-            <form onSubmit={handleSearch} className="hidden md:block">
+            <form onSubmit={handleSearch} className="hidden ml-19  md:block md:ml-6 lg:ml-11">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
@@ -109,7 +109,7 @@ const Navbar = ({ onMenuClick }) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 focus:outline-none z-50">
+                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 focus:outline-none z-[60]">
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-slate-700">
                     <p className="text-sm font-medium text-gray-900 dark:text-slate-100">
                       {user?.full_name || 'User'}

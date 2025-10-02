@@ -57,7 +57,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       {/* Welcome Header */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700">
         <div className="flex items-center space-x-4">

@@ -13,7 +13,7 @@ import LandingPage from './pages/public/LandingPage';
 import PricingPage from './pages/public/PricingPage';
 
 // Auth Pages
-import LoginPage from './pages/auth/LoginPage';
+import LoginPage from './pages/auth/LoginPage'; 
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 

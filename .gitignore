@@ -1,0 +1,60 @@
+# --- General ---
+.DS_Store
+Thumbs.db
+*.log
+logs/
+
+# --- Git ---
+.git-credentials
+.git-rewrite/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distributions
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# --- Django ---
+media/
+staticfiles/
+static/
+
+# SQLite databases
+*.sqlite3
+db.sqlite3
+
+# Environment files
+.env
+.env.*
+*.env
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+
+# --- Node / Frontend (ilm-kademy-frontend) ---
+ilm-kademy-frontend/node_modules/
+ilm-kademy-frontend/build/
+ilm-kademy-frontend/.cache/
+ilm-kademy-frontend/.next/
+ilm-kademy-frontend/dist/
+ilm-kademy-frontend/coverage/
+ilm-kademy-frontend/npm-debug.log*
+ilm-kademy-frontend/yarn-error.log*
+
+# Node lockfiles (optional to ignore if you commit them)
+# ilm-kademy-frontend/package-lock.json
+# ilm-kademy-frontend/yarn.lock

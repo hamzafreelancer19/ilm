@@ -28,10 +28,10 @@ const AppShell = () => {
   return (
     <div className="h-screen bg-light-background dark:bg-dark-background flex flex-col">
       {/* Navbar */}
-      <Navbar onMenuClick={toggleSidebar} />
+      <Navbar onMenuClick={toggleSidebar}  />
       
       {/* Main Layout Container */}
-      <div className="flex flex-1 overflow-hidden pt-16">
+      <div className="flex  overflow-hidden pt-16  lg:pl-64">
         {/* Sidebar */}
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         
