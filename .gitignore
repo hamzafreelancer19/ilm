@@ -54,6 +54,15 @@ ilm-kademy-frontend/dist/
 ilm-kademy-frontend/coverage/
 ilm-kademy-frontend/npm-debug.log*
 ilm-kademy-frontend/yarn-error.log*
+ilm-kademy-frontend/.eslintcache
+ilm-kademy-frontend/.stylelintcache
+ilm-kademy-frontend/.parcel-cache/
+ilm-kademy-frontend/.vite/
+ilm-kademy-frontend/.turbo/
+ilm-kademy-frontend/.pnp
+ilm-kademy-frontend/.pnp.*
+ilm-kademy-frontend/.sass-cache/
+ilm-kademy-frontend/.cache-loader/
 
 # Node lockfiles (optional to ignore if you commit them)
 # ilm-kademy-frontend/package-lock.json
