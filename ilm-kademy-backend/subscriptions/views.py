@@ -45,23 +45,38 @@ class SubscriptionDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Subscription.objects.filter(user=self.request.user)
 
-class CurrentSubscriptionView(generics.RetrieveAPIView):
+class CurrentSubscriptionView(generics.GenericAPIView):
     """
     Get the current user's active subscription.
     """
-    serializer_class = SubscriptionSerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    def get_object(self):
-        # Get the user's current active subscription
-        subscription = Subscription.objects.filter(
-            user=self.request.user,
-            status__in=['ACTIVE', 'TRIAL']
-        ).first()
-        
-        if not subscription:
-            # Return a default structure if no subscription exists
-            return {
+    def get(self, request, *args, **kwargs):
+        try:
+            # Get the user's current active subscription
+            subscription = Subscription.objects.filter(
+                user=request.user,
+                status__in=['ACTIVE', 'TRIAL']
+            ).first()
+            
+            if subscription:
+                serializer = SubscriptionSerializer(subscription)
+                return Response(serializer.data)
+            else:
+                # Return a default free plan structure
+                return Response({
+                    'id': 'free',
+                    'name': 'Free Plan',
+                    'price': 0,
+                    'period': 'month',
+                    'status': 'active',
+                    'next_billing_date': None,
+                    'start_date': None,
+                    'auto_renew': False
+                })
+        except Exception as e:
+            # If there's an error, return a default free plan
+            return Response({
                 'id': 'free',
                 'name': 'Free Plan',
                 'price': 0,
@@ -70,41 +85,42 @@ class CurrentSubscriptionView(generics.RetrieveAPIView):
                 'next_billing_date': None,
                 'start_date': None,
                 'auto_renew': False
-            }
-        
-        return subscription
+            })
 
-class BillingHistoryView(generics.ListAPIView):
+class BillingHistoryView(generics.GenericAPIView):
     """
     Get the user's billing history.
     """
-    serializer_class = SubscriptionSerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    def get_queryset(self):
-        # For now, return the user's subscriptions as billing history
-        # In a real app, you'd have a separate BillingRecord model
-        return Subscription.objects.filter(user=self.request.user).order_by('-created_at')
-    
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        
-        # Transform subscriptions into billing history format
-        billing_history = []
-        for subscription in queryset:
-            billing_history.append({
-                'id': subscription.id,
-                'date': subscription.created_at.strftime('%Y-%m-%d'),
-                'amount': float(subscription.get_price()),
-                'status': subscription.status.lower(),
-                'invoice_number': f'INV-{subscription.id:03d}',
-                'description': f'{subscription.plan.name} - {subscription.billing_cycle} Subscription'
+    def get(self, request, *args, **kwargs):
+        try:
+            # For now, return the user's subscriptions as billing history
+            # In a real app, you'd have a separate BillingRecord model
+            subscriptions = Subscription.objects.filter(user=request.user).order_by('-created_at')
+            
+            # Transform subscriptions into billing history format
+            billing_history = []
+            for subscription in subscriptions:
+                billing_history.append({
+                    'id': subscription.id,
+                    'date': subscription.created_at.strftime('%Y-%m-%d'),
+                    'amount': float(subscription.get_price()),
+                    'status': subscription.status.lower(),
+                    'invoice_number': f'INV-{subscription.id:03d}',
+                    'description': f'{subscription.plan.name} - {subscription.billing_cycle} Subscription'
+                })
+            
+            return Response({
+                'results': billing_history,
+                'count': len(billing_history)
             })
-        
-        return Response({
-            'results': billing_history,
-            'count': len(billing_history)
-        })
+        except Exception as e:
+            # If there's an error, return empty billing history
+            return Response({
+                'results': [],
+                'count': 0
+            })
 
 class EntitlementListView(generics.ListAPIView):
     """

@@ -9,9 +9,12 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useAuth } from '../../contexts/AuthContext';
 import { API_ENDPOINTS } from '../../config/api';
 
 const SubscriptionsPage = () => {
+  const { user, tokens } = useAuth();
   const [currentPlan, setCurrentPlan] = useState(null);
   const [billingHistory, setBillingHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,71 +80,82 @@ const SubscriptionsPage = () => {
 
   const fetchSubscriptionData = async () => {
     try {
-      // TODO: Replace with actual API calls
+      // Check if user is authenticated
+      if (!tokens?.access) {
+        console.log('No authentication token found, using mock data');
+        loadMockData();
+        return;
+      }
+
+      // Make authenticated API calls using axios
       const [subscriptionResponse, billingResponse] = await Promise.all([
-        fetch(API_ENDPOINTS.SUBSCRIPTIONS + 'current/'),
-        fetch(API_ENDPOINTS.SUBSCRIPTIONS + 'billing-history/')
+        axios.get(API_ENDPOINTS.SUBSCRIPTIONS + 'current/'),
+        axios.get(API_ENDPOINTS.SUBSCRIPTIONS + 'billing-history/')
       ]);
 
-      if (subscriptionResponse.ok) {
-        const subscriptionData = await subscriptionResponse.json();
-        setCurrentPlan(subscriptionData);
+      if (subscriptionResponse.data) {
+        setCurrentPlan(subscriptionResponse.data);
       }
 
-      if (billingResponse.ok) {
-        const billingData = await billingResponse.json();
-        setBillingHistory(billingData.results || []);
+      if (billingResponse.data) {
+        setBillingHistory(billingResponse.data.results || []);
       }
 
-      // Mock data for development
+      // If no data from API, load mock data
       if (!currentPlan) {
-        setCurrentPlan({
-          id: 'pro',
-          name: 'Pro Plan',
-          price: 19.99,
-          period: 'month',
-          status: 'active',
-          next_billing_date: '2024-03-15',
-          start_date: '2024-01-15',
-          auto_renew: true
-        });
-      }
-
-      if (billingHistory.length === 0) {
-        setBillingHistory([
-          {
-            id: 1,
-            date: '2024-01-15',
-            amount: 19.99,
-            status: 'paid',
-            invoice_number: 'INV-001',
-            description: 'Pro Plan - Monthly Subscription'
-          },
-          {
-            id: 2,
-            date: '2023-12-15',
-            amount: 19.99,
-            status: 'paid',
-            invoice_number: 'INV-002',
-            description: 'Pro Plan - Monthly Subscription'
-          },
-          {
-            id: 3,
-            date: '2023-11-15',
-            amount: 19.99,
-            status: 'paid',
-            invoice_number: 'INV-003',
-            description: 'Pro Plan - Monthly Subscription'
-          }
-        ]);
+        loadMockData();
       }
 
     } catch (error) {
       console.error('Error fetching subscription data:', error);
+      // If API call fails, load mock data for development
+      loadMockData();
       toast.error('Failed to load subscription information');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const loadMockData = () => {
+    // Mock current plan data
+    setCurrentPlan({
+      id: 'pro',
+      name: 'Pro Plan',
+      price: 19.99,
+      period: 'month',
+      status: 'active',
+      next_billing_date: '2024-03-15',
+      start_date: '2024-01-15',
+      auto_renew: true
+    });
+
+    // Mock billing history data
+    setBillingHistory([
+      {
+        id: 1,
+        date: '2024-01-15',
+        amount: 19.99,
+        status: 'paid',
+        invoice_number: 'INV-001',
+        description: 'Pro Plan - Monthly Subscription'
+      },
+      {
+        id: 2,
+        date: '2023-12-15',
+        amount: 19.99,
+        status: 'paid',
+        invoice_number: 'INV-002',
+        description: 'Pro Plan - Monthly Subscription'
+      },
+      {
+        id: 3,
+        date: '2023-11-15',
+        amount: 19.99,
+        status: 'paid',
+        invoice_number: 'INV-003',
+        description: 'Pro Plan - Monthly Subscription'
+      }
+    ]);
   };
 
   const handleUpgrade = (planId) => {

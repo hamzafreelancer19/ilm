@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { Toaster } from 'react-hot-toast';
@@ -31,7 +31,12 @@ import SettingsPage from './pages/settings/SettingsPage';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
         <AuthProvider>
           <div className="h-full bg-light-background dark:bg-dark-background transition-colors duration-200">
             <Routes>
@@ -55,7 +60,12 @@ function App() {
                 <Route path="library/:bookId" element={<BookDetailPage />} />
                 <Route path="library/:bookId/chapter/:chapterId" element={<ChapterViewerPage />} />
                 <Route path="quizzes" element={<QuizzesPage />} />
+                <Route path="quizzes/:quizId/attempt" element={<div className="p-6"><h1 className="text-2xl font-bold">Quiz Attempt</h1><p>Quiz attempt feature coming soon!</p></div>} />
+                <Route path="quizzes/:quizId/results" element={<div className="p-6"><h1 className="text-2xl font-bold">Quiz Results</h1><p>Quiz results feature coming soon!</p></div>} />
                 <Route path="assignments" element={<AssignmentsPage />} />
+                <Route path="classes" element={<div className="p-6"><h1 className="text-2xl font-bold">Classes</h1><p>Classes feature coming soon!</p></div>} />
+                <Route path="content" element={<div className="p-6"><h1 className="text-2xl font-bold">Content</h1><p>Content management feature coming soon!</p></div>} />
+                <Route path="progress" element={<div className="p-6"><h1 className="text-2xl font-bold">Progress</h1><p>Track your learning progress and achievements!</p></div>} />
                 <Route path="subscriptions" element={<SubscriptionsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SettingsPage />} />

@@ -60,7 +60,10 @@ export const AuthProvider = ({ children }) => {
             refresh: tokens?.refresh
           });
             
-            const newTokens = response.data;
+            const newTokens = {
+              access: response.data.access,
+              refresh: tokens?.refresh // Keep the same refresh token
+            };
             setTokens(newTokens);
             localStorage.setItem('tokens', JSON.stringify(newTokens));
             
