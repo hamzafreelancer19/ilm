@@ -126,6 +126,10 @@ coverage.xml
 .dmypy.json
 dmypy.json
 
+# Database files
+*.sqlite3
+*.db
+
 # OS generated files
 .DS_Store
 .DS_Store?
