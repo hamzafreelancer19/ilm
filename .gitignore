@@ -46,6 +46,7 @@ db.sqlite3
 *.swp
 
 # --- Node / Frontend (ilm-kademy-frontend) ---
+ilm-kademy-frontend/src/modules/
 ilm-kademy-frontend/node_modules/
 ilm-kademy-frontend/build/
 ilm-kademy-frontend/.cache/
