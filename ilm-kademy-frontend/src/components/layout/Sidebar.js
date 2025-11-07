@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-
-import { 
+import {
   XMarkIcon,
   HomeIcon,
   BookOpenIcon,
@@ -27,31 +26,32 @@ const Sidebar = ({ open, onClose }) => {
     ];
 
     const roleSpecificItems = {
-      'SUPER_ADMIN': [
+      SUPER_ADMIN: [
         { name: 'Users', href: '/app/users', icon: UserGroupIcon },
         { name: 'Institutes', href: '/app/institutes', icon: AcademicCapIcon },
         { name: 'Platform Stats', href: '/app/stats', icon: ChartBarIcon },
         { name: 'System Settings', href: '/app/settings', icon: Cog6ToothIcon },
       ],
-      'INSTITUTE_ADMIN': [
+      INSTITUTE_ADMIN: [
         { name: 'Members', href: '/app/members', icon: UserGroupIcon },
         { name: 'Institute Stats', href: '/app/stats', icon: ChartBarIcon },
         { name: 'Billing', href: '/app/billing', icon: CreditCardIcon },
         { name: 'Settings', href: '/app/settings', icon: Cog6ToothIcon },
       ],
-      'TEACHER': [
+      TEACHER: [
         { name: 'My Classes', href: '/app/classes', icon: AcademicCapIcon },
         { name: 'Create Content', href: '/app/content', icon: DocumentTextIcon },
         { name: 'Grade Assignments', href: '/app/assignments', icon: ClipboardDocumentListIcon },
         { name: 'Student Progress', href: '/app/progress', icon: ChartBarIcon },
         { name: 'Settings', href: '/app/settings', icon: Cog6ToothIcon },
       ],
-      'STUDENT': [
+      STUDENT: [
         { name: 'My Assignments', href: '/app/assignments', icon: ClipboardDocumentListIcon },
         { name: 'My Quizzes', href: '/app/quizzes', icon: QuestionMarkCircleIcon },
         { name: 'My Progress', href: '/app/progress', icon: ChartBarIcon },
         { name: 'Settings', href: '/app/settings', icon: Cog6ToothIcon },
-      ]
+
+      ],
     };
 
     const commonItems = [
@@ -148,4 +148,4 @@ const Sidebar = ({ open, onClose }) => {
   );
 };
 
-export default Sidebar; 
+export default Sidebar;

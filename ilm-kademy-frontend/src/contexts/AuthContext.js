@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,16 @@ export const AuthProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Define logout function early so it can be used in interceptors
+  const logout = useCallback(() => {
+    setUser(null);
+    setTokens(null);
+    localStorage.removeItem('tokens');
+    delete axios.defaults.headers.common['Authorization'];
+    navigate('/');
+    toast.success('Logged out successfully');
+  }, [navigate]);
 
   // Configure axios defaults
   useEffect(() => {
@@ -52,13 +62,27 @@ export const AuthProvider = ({ children }) => {
       async (error) => {
         const originalRequest = error.config;
 
+        // Check if the failed request is the refresh endpoint itself
+        const isRefreshEndpoint = originalRequest.url?.includes('/token/refresh/');
+        
+        // If refresh endpoint fails, logout immediately to prevent infinite loop
+        if (isRefreshEndpoint && error.response?.status === 401) {
+          logout();
+          return Promise.reject(error);
+        }
+        
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
-                  try {
-          const response = await axios.post(API_ENDPOINTS.AUTH.REFRESH, {
-            refresh: tokens?.refresh
-          });
+          try {
+            // Create a separate axios instance for refresh to avoid interceptor loop
+            const refreshAxios = axios.create({
+              baseURL: process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000'
+            });
+            
+            const response = await refreshAxios.post(API_ENDPOINTS.AUTH.REFRESH, {
+              refresh: tokens?.refresh
+            });
             
             const newTokens = {
               access: response.data.access,
@@ -70,6 +94,7 @@ export const AuthProvider = ({ children }) => {
             originalRequest.headers.Authorization = `Bearer ${newTokens.access}`;
             return axios(originalRequest);
           } catch (refreshError) {
+            // Refresh failed, logout immediately
             logout();
             return Promise.reject(refreshError);
           }
@@ -83,28 +108,39 @@ export const AuthProvider = ({ children }) => {
       axios.interceptors.request.eject(requestInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [tokens]);
+  }, [tokens, logout]);
 
   // Check if user is authenticated on mount
+  const checkAuth = useCallback(async () => {
+    try {
+      const response = await axios.get(API_ENDPOINTS.AUTH.PROFILE);
+      setUser(response.data);
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      // If the profile endpoint returns 401 it usually means the access token is
+      // missing or expired. Don't force a full logout/navigation here because
+      // that can trigger other parts of the UI to receive `null` props and
+      // cause unrelated runtime errors. Instead, clear the user state and
+      // leave token handling to the interceptor logic which attempts refresh.
+      if (error.response?.status === 401) {
+        setUser(null);
+      } else {
+        // For other errors (network, 5xx), perform a normal logout to keep
+        // the app in a predictable state.
+        logout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [logout]);
+
   useEffect(() => {
     if (tokens?.access) {
       checkAuth();
     } else {
       setLoading(false);
     }
-  }, [tokens]);
-
-  const checkAuth = async () => {
-    try {
-      const response = await axios.get(API_ENDPOINTS.AUTH.PROFILE);
-      setUser(response.data);
-    } catch (error) {
-      console.error('Auth check failed:', error);
-      logout();
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [tokens, checkAuth]);
 
   const login = async (email, password) => {
     try {
@@ -154,15 +190,6 @@ export const AuthProvider = ({ children }) => {
       toast.error(message);
       return { success: false, error: message };
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setTokens(null);
-    localStorage.removeItem('tokens');
-    delete axios.defaults.headers.common['Authorization'];
-    navigate('/');
-    toast.success('Logged out successfully');
   };
 
   const updateProfile = async (profileData) => {

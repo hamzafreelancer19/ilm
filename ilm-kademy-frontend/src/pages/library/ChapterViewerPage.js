@@ -17,7 +17,9 @@ import {
   ChartBarIcon,
   Cog6ToothIcon,
   MagnifyingGlassIcon,
-  BookmarkIcon
+  BookmarkIcon,
+  ArrowsPointingOutIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { API_ENDPOINTS } from '../../config/api';
@@ -39,6 +41,8 @@ const ChapterViewerPage = () => {
   const [completedSections, setCompletedSections] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [isFullscreenPdf, setIsFullscreenPdf] = useState(false);
+  const [currentPdfUrl, setCurrentPdfUrl] = useState(null);
 
   useEffect(() => {
     // Reset loading state when bookId or chapterId changes
@@ -52,6 +56,23 @@ const ChapterViewerPage = () => {
     }
   }, [bookId, chapterId, isLoadingData, hasLoaded]);
 
+  // Handle Escape key to close fullscreen PDF modal
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && isFullscreenPdf) {
+        setIsFullscreenPdf(false);
+      }
+    };
+
+    if (isFullscreenPdf) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isFullscreenPdf]);
+
   const loadMockData = () => {
     setBook({
       id: bookId,
@@ -61,13 +82,13 @@ const ChapterViewerPage = () => {
     
     setChapter({
       id: chapterId,
-      title: 'The Art of Effective Communication',
       description: 'Learn the principles of effective communication in English, covering both verbal and non-verbal aspects.',
       sections: [
         {
           id: 1,
           kind: 'INTRODUCTION',
           title: 'Understanding Communication',
+          pdf_file: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf', // Working PDF example
           content: {
             text: 'Communication is the foundation of human interaction. This chapter explores the principles of effective communication in English, covering both verbal and non-verbal aspects.',
             key_concepts: ['Verbal communication', 'Non-verbal cues', 'Active listening', 'Clear expression'],
@@ -176,7 +197,7 @@ const ChapterViewerPage = () => {
             setCompletedSections(chapterData.reading_progress.completed_sections || []);
           }
         }
-<<<<<<< Updated upstream
+
       } else if (chapterResponse.status === 401) {
         // If unauthorized, show mock data for development
         console.log('Using mock chapter data due to authentication required');
@@ -1473,15 +1494,8 @@ const ChapterViewerPage = () => {
         
         const chaptersData = mockChaptersData[parseInt(bookId)] || mockChaptersData[1];
         setChapters(chaptersData);
-=======
       }
-
-      if (chaptersResponse.status === 'fulfilled' && chaptersResponse.value.ok) {
-        const chaptersData = await chaptersResponse.value.json();
-        setChapters(chaptersData.results || []);
->>>>>>> Stashed changes
-      }
-
+      
     } catch (error) {
       console.error('Error fetching data:', error);
       console.log('Using mock data due to error');
@@ -1591,7 +1605,7 @@ const ChapterViewerPage = () => {
 
       <div className="flex h-screen flex-col">
         {/* Chapter Sections List */}
-        <div className="w-fit bg-white border-r border-gray-200 p-3 shadow-sm flex flex-col gap-10 ">
+        <div className="w-full sm:w-[25%] md:w-[50%] lg:w-[100%] bg-white border-r border-gray-200 p-3 shadow-sm flex flex-col gap-10 justify-center items-center  ">
           <h3 className="text-base font-['Poppins'] font-bold text-[#111827] mb-3 text-center">Chapter Sections</h3>
           <div className="space-y-1 ">
             {chapter.sections?.map((section, index) => {
@@ -1629,7 +1643,7 @@ const ChapterViewerPage = () => {
         {/* Main Content Area */}
         <div className="flex-1 bg-[#F9FAFB] p-4 w-screen md:w-screen">
           {/* Action Buttons */}
-          <div className="flex items-center justify-between mb-4 w-[76%]">
+          <div className="flex items-center justify-between mb-4 w-[100%] sm:w-[76%] md:w-[76%] lg:w-[76%] gap-5">
             <div className="flex items-center space-x-2 ">
               <button className="flex items-center px-3 py-2 border border-[#1E3A8A] rounded-md text-sm font-['Poppins'] font-semibold text-[#1E3A8A] bg-white hover:bg-[#1E3A8A] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                 <AcademicCapIcon className="h-4 w-4 mr-1" />
@@ -1639,16 +1653,13 @@ const ChapterViewerPage = () => {
                 <SpeakerWaveIcon className="h-4 w-4 mr-1" />
                 Read Aloud
               </button>
-              <button className="flex items-center px-3 py-2 border border-[#FBBF24] rounded-md text-sm font-['Poppins'] font-semibold text-[#FBBF24] bg-white hover:bg-[#FBBF24] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <button className="flex items-center px-3 py-2 border border-[#FBBF24] rounded-md text-sm font-['Poppins'] font-semibold text-[#FBBF24] bg-white hover:bg-[#FBBF24] hover:text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 w-[100px] sm:w-[120px] md:w-[140px]">
                 <BookmarkIcon className="h-4 w-4 mr-1" />
                 Bookmark
               </button>
             </div>
             
-            <button className="bg-[#10B981] text-white px-4 py-2 rounded-md text-sm font-['Poppins'] font-semibold hover:bg-[#059669] transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-              <PlayIcon className="h-4 w-4 mr-1" />
-              Mark Complete
-            </button>
+           
           </div>
 
           {/* Section Content */}
@@ -1660,13 +1671,146 @@ const ChapterViewerPage = () => {
               }
             </h1>
             
-            <div className="prose max-w-none">
+            <div className="prose">
               {chapter.sections && chapter.sections[currentSection] ? (
-                <div className="bg-white w-[76%] rounded-lg border border-gray-200 p-4 shadow-lg">
+                <div className="bg-white w-11/12 xl:w-[72%]  rounded-lg border border-gray-200 p-4 shadow-lg">
                   <div className="space-y-3">
                     {(() => {
                       const section = chapter.sections[currentSection];
                       const { kind, content } = section;
+                      
+                      // Check if this section has a PDF to display
+                      if (content?.pdf || content?.pdf_file || section.pdf_file) {
+                        const pdfUrl = content?.pdf || content?.pdf_file || section.pdf_file;
+                        // Update current PDF URL when section changes
+                        if (pdfUrl && currentPdfUrl !== pdfUrl) {
+                          setCurrentPdfUrl(pdfUrl);
+                        }
+                        return (
+                          <div className="space-y-4 ">
+                            {/* Section Content Before PDF */}
+                            {content.text && (
+                              <div className="mb-4">
+                                <p className="text-[#111827] leading-relaxed text-base font-['Roboto']">{content.text}</p>
+                              </div>
+                            )}
+                            
+                            {/* Display key concepts if available */}
+                            {content.key_concepts && content.key_concepts.length > 0 && (
+                              <div className="bg-[#F9FAFB] p-4 rounded-lg border border-gray-200 mb-4">
+                                <h4 className="font-['Poppins'] font-bold text-[#111827] mb-3 text-sm">Key Points</h4>
+                                <ul className="space-y-2">
+                                  {content.key_concepts.map((concept, index) => (
+                                    <li key={index} className="flex items-start space-x-2">
+                                      <span className="flex-shrink-0 w-4 h-4 bg-[#10B981] text-white rounded-full flex items-center justify-center text-xs font-['Poppins'] font-bold">
+                                        {index + 1}
+                                      </span>
+                                      <span className="text-[#111827] font-['Roboto'] text-sm">{concept}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            {/* Display objectives if available */}
+                            {content.objectives && content.objectives.length > 0 && (
+                              <div className="bg-[#F9FAFB] p-4 rounded-lg border border-gray-200 mb-4">
+                                <h4 className="font-['Poppins'] font-bold text-[#111827] mb-3 text-sm">Learning Objectives</h4>
+                                <ul className="space-y-2">
+                                  {content.objectives.map((objective, index) => (
+                                    <li key={index} className="flex items-start space-x-2">
+                                      <span className="flex-shrink-0 w-4 h-4 bg-[#10B981] text-white rounded-full flex items-center justify-center text-xs font-['Poppins'] font-bold">
+                                        {index + 1}
+                                      </span>
+                                      <span className="text-[#111827] font-['Roboto'] text-sm">{objective}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            {/* Display overview if available */}
+                            {content.overview && (
+                              <div className="bg-[#1E3A8A] bg-opacity-10 p-3 rounded-md border-l-4 border-[#1E3A8A] mb-4">
+                                <h4 className="font-['Poppins'] font-bold text-[#1E3A8A] mb-2 text-sm">Overview</h4>
+                                <p className="text-[#1E3A8A] font-['Roboto'] leading-relaxed text-sm">{content.overview}</p>
+                              </div>
+                            )}
+                            
+                            {/* PDF Viewer */}
+                            <div className="border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                              <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-3 flex items-center justify-between border-b border-gray-300">
+                                <div className="flex items-center space-x-2">
+                                  <DocumentTextIcon className="h-5 w-5 text-red-600" />
+                                  <span className="font-['Poppins'] font-semibold text-gray-700">Document Viewer</span>
+                                </div>
+                                <div className="flex items-center space-x-3">
+                                  <button
+                                    onClick={() => setIsFullscreenPdf(true)}
+                                    className="text-sm text-[#DC2626] hover:text-[#B91C1C] font-['Poppins'] font-medium  flex items-center space-x-1"
+                                  >
+                                    <ArrowsPointingOutIcon className="h-4 w-4" />
+                                    <span>Full View</span>
+                                  </button>
+                                  <a
+                                    href={pdfUrl}
+                                    download
+                                    className="text-sm text-[#10B981] hover:text-[#059669] font-['Poppins'] font-medium underline"
+                                  >
+                                    Download PDF
+                                  </a>
+                                
+                                </div>
+                              </div>
+                              <div className="bg-gray-100 p-6 flex justify-center" style={{ minHeight: '800px' }}>
+                                <div className="border border-gray-300 rounded-lg bg-white shadow-inner relative w-full max-w-4xl" style={{ height: '800px' }}>
+                                  <iframe
+                                    src={`${pdfUrl}#toolbar=1&navpanes=1&scrollbar=1&page=1&zoom=page-width`}
+                                    className="w-full h-full border-0 rounded-lg"
+                                    title="PDF Viewer"
+                                  />
+                                  {/* Fallback message if PDF fails to load */}
+                                  <div className="absolute inset-0 flex items-center justify-center bg-white rounded-lg hidden" id="pdf-fallback">
+                                    <div className="text-center p-6">
+                                      <DocumentTextIcon className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+                                      <h3 className="text-lg font-['Poppins'] font-bold text-gray-700 mb-2">
+                                        Unable to Display PDF
+                                      </h3>
+                                      <p className="text-sm font-['Roboto'] text-gray-600 mb-4">
+                                        The document cannot be displayed inline. Please download or open it in a new tab.
+                                      </p>
+                                      <div className="flex items-center justify-center space-x-4">
+                                        <a
+                                          href={pdfUrl}
+                                          download
+                                          className="bg-[#10B981] text-white px-4 py-2 rounded-md text-sm font-['Poppins'] font-medium hover:bg-[#059669] transition-colors"
+                                        >
+                                          Download PDF
+                                        </a>
+                                        <a
+                                          href={pdfUrl}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="bg-[#1E3A8A] text-white px-4 py-2 rounded-md text-sm font-['Poppins'] font-medium hover:bg-[#1E40AF] transition-colors"
+                                        >
+                                          Open in New Tab
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Additional content after PDF */}
+                            {content.additional_info && (
+                              <div className="bg-blue-50 p-4 rounded-md border-l-4 border-blue-500">
+                                <p className="text-blue-700 font-['Roboto'] text-sm">{content.additional_info}</p>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
                       
                       switch (kind) {
                         case 'INTRODUCTION':
@@ -2119,8 +2263,8 @@ const ChapterViewerPage = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mb-4 w-[76%]">
-            <button
+          <div className="flex items-center justify-between mb-4 w-11/12 xl:w-[72%]">
+            <button 
               onClick={() => setCurrentSection(Math.max(0, currentSection - 1))}
               disabled={currentSection === 0}
               className="flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-['Poppins'] font-semibold text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:transform-none"
@@ -2140,7 +2284,7 @@ const ChapterViewerPage = () => {
           </div>
 
           {/* Personal Notes */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-lg w-[76%]">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-lg w-11/12 xl:w-[72%].">
             <h3 className="text-base font-['Poppins'] font-bold text-[#111827] mb-3">Personal Notes</h3>
             <textarea
               value={userNotes}
@@ -2155,6 +2299,45 @@ const ChapterViewerPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Fullscreen PDF Modal */}
+      {isFullscreenPdf && currentPdfUrl && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
+          <div className="relative w-full h-full flex flex-col">
+            {/* Header */}
+            <div className="bg-gray-900 px-6 py-4 flex items-center justify-between border-b border-gray-700">
+              <div className="flex items-center space-x-3">
+                <DocumentTextIcon className="h-6 w-6 text-red-500" />
+                <span className="font-['Poppins'] font-semibold text-white text-lg">Full View - PDF Document</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <a
+                  href={currentPdfUrl}
+                  download
+                  className="text-sm text-[#10B981] hover:text-[#059669] font-['Poppins'] font-medium underline flex items-center space-x-1"
+                >
+                  <span>Download</span>
+                </a>
+                <button
+                  onClick={() => setIsFullscreenPdf(false)}
+                  className="text-white hover:text-gray-300 transition-colors p-2 hover:bg-gray-800 rounded-lg"
+                  aria-label="Close fullscreen"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+            </div>
+            {/* PDF Viewer */}
+            <div className="flex-1 bg-gray-100 p-6 flex justify-center overflow-hidden">
+              <iframe
+                src={`${currentPdfUrl}#toolbar=1&navpanes=1&scrollbar=1&zoom=page-width`}
+                className="w-full h-full border-0 rounded-lg bg-white shadow-2xl"
+                title="Fullscreen PDF Viewer"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

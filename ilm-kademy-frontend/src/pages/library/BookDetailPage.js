@@ -426,13 +426,13 @@ const BookDetailPage = () => {
           <div className="lg:col-span-2">
             {/* Book Header */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-              <div className="flex items-start space-x-6">
+              <div className=" items-start space-x-6">
                 <img
                   src={book.cover_image}
                   alt={book.title}
-                  className="w-32 h-40 object-cover rounded-lg shadow-md"
+                  className="w-[100%] h-40 object-cover rounded-lg shadow-md"
                 />
-                <div className="flex-1">
+                <div className="flex-1 mt-4 ">
                   <div className="flex items-center space-x-3 mb-3">
                     {getSubjectIcon(book.subject)}
                     <span className="text-sm font-medium text-gray-500 uppercase">
@@ -537,26 +537,25 @@ const BookDetailPage = () => {
                   </div>
                 )}
 
-                {/* Chapters Tab */}
-                {activeTab === 'chapters' && (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
-                      Course Content ({chapters.length} chapters)
-                    </h3>
-                    {chapters.map((chapter, index) => (
-                      <div
-                        key={chapter.id}
-                        className="border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-medium">
-                              {index + 1}
-                            </div>
-                            <div>
-                              <h4 className="font-medium text-gray-900">{chapter.title}</h4>
-                              <p className="text-sm text-gray-600">{chapter.description}</p>
-                              <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                        {activeTab === 'chapters' && (
+                          <div className="space-y-4">
+                          <h3 className="text-lg font-medium text-gray-900 mb-4">
+                            Course Content ({chapters.length} chapters)
+                          </h3>
+                          {chapters.map((chapter, index) => (
+                            <div
+                            key={chapter.id}
+                            className="border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200"
+                            >
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                              <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-medium">
+                                {index + 1}
+                              </div>
+                              <div className="w-full sm:w-auto">
+                                <h4 className="font-medium text-gray-900">{chapter.title}</h4>
+                                <p className="text-sm text-gray-600 mt-1">{chapter.description}</p>
+                                <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-gray-500">
                                 <span className="flex items-center">
                                   <ClockIcon className="h-4 w-4 mr-1" />
                                   {chapter.duration}
@@ -565,22 +564,22 @@ const BookDetailPage = () => {
                                   <DocumentTextIcon className="h-4 w-4 mr-1" />
                                   {chapter.sections_count || chapter.sections?.length || 0} sections
                                 </span>
+                                </div>
                               </div>
+                              </div>
+                              <Link
+                              to={`/app/library/${bookId}/chapter/${chapter.id}`}
+                              className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors duration-200 text-center"
+                              >
+                              Start Chapter
+                              </Link>
                             </div>
+                            </div>
+                          ))}
                           </div>
-                          <Link
-                            to={`/app/library/${bookId}/chapter/${chapter.id}`}
-                            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
-                          >
-                            Start Chapter
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                        )}
 
-                {/* Learning Objectives Tab */}
+                        {/* Learning Objectives Tab */}
                 {activeTab === 'objectives' && (
                   <div className="space-y-6">
                     <div>
